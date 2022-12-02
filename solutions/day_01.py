@@ -5,7 +5,7 @@ import pandas as pd
 
 
 def parse_file(fd):
-    return pd.read_csv(fd, header=None, index_col=False, skip_blank_lines=False).squeeze("columns"),
+    return pd.read_csv(fd, header=None, skip_blank_lines=False).squeeze("columns"),
 
 def count_calories(calories):
     return int(calories.groupby(np.isnan(calories).cumsum()).sum().max())
