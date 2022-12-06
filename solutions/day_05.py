@@ -29,7 +29,7 @@ def tops_of_stacks_after_rearrangement_9000(stacks, action_df):
         for _ in range(count):
             stacks[to].append(stacks[from_].pop())
 
-    tops_of_stacks = ''.join([stack[-1] for stack in stacks])
+    tops_of_stacks = ''.join(stack[-1] for stack in stacks)
 
     return tops_of_stacks
 
@@ -39,7 +39,7 @@ def tops_of_stacks_after_rearrangement_9001(stacks, action_df):
         stacks[to].extend(stacks[from_][-count:])
         del stacks[from_][-count:]
 
-    tops_of_stacks = ''.join([stack[-1] for stack in stacks])
+    tops_of_stacks = ''.join(stack[-1] for stack in stacks)
 
     return tops_of_stacks
 
