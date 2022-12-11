@@ -31,25 +31,27 @@ class Dir:
 
 
 def parse_file(fd):
-    return fd.readlines(),
+    return (fd.readlines(),)
+
 
 def _build_filesystem_tree(root_dir, outputs):
     current_dir = root_dir
     for output in outputs:
-        if output.startswith('$ cd'):
+        if output.startswith("$ cd"):
             _, _, dir_name = output.split()
             if dir_name == "..":
                 current_dir = current_dir.exit()
             else:
                 current_dir = current_dir.enter(dir_name)
-        elif output.startswith('$ ls'):
+        elif output.startswith("$ ls"):
             pass
-        elif output.startswith('dir'):
+        elif output.startswith("dir"):
             _, dir_name = output.split()
             current_dir.add_dir(dir_name)
         else:
             file_size, file_name = output.split()
             current_dir.add_file(file_name, int(file_size))
+
 
 def dir_size_less_than_100000(outputs):
     def count_size(dir_):
@@ -62,13 +64,18 @@ def dir_size_less_than_100000(outputs):
     _build_filesystem_tree(root_dir, outputs=outputs[1:])
     return count_size(root_dir)
 
+
 def dir_to_delete(outputs):
     disc_space = 70000000
     space_needed = 30000000
 
     def find_space_to_delete(dir_, space_to_release):
         childern_dirs = dir_.dirs.values()
-        spaces = [space for d in childern_dirs if (space := find_space_to_delete(d, space_to_release))]
+        spaces = [
+            space
+            for d in childern_dirs
+            if (space := find_space_to_delete(d, space_to_release))
+        ]
         if dir_.size >= space_to_release:
             spaces.append(dir_.size)
         if spaces:
@@ -81,6 +88,7 @@ def dir_to_delete(outputs):
     space_to_release = space_needed - (disc_space - root_dir.size)
     assert space_to_release >= 0
     return find_space_to_delete(root_dir, space_to_release)
+
 
 solution_function_01 = dir_size_less_than_100000
 solution_function_02 = dir_to_delete
